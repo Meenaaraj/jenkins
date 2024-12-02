@@ -8,27 +8,28 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                // Checkout the code from GitHub repository
-                git 'https://github.com/Meenaaraj/jenkins'
+                script {
+                    // Checkout the code from GitHub repository, specifying the main branch
+                    git branch: 'main', url: 'https://github.com/Meenaaraj/jenkins'
+                }
             }
         }
 
         stage('Set up Python') {
             steps {
-                // Install Python 3
+                // Install Python 3 and pip, along with python3-venv for virtualenv support
                 sh '''
                     sudo apt-get update
-                    sudo apt-get install -y python3 python3-pip
+                    sudo apt-get install -y python3 python3-pip python3-venv
                 '''
             }
         }
 
         stage('Install Dependencies') {
             steps {
-
                 echo 'This is a valid stage with steps.'
-                // Install any dependencies listed in requirements.txt (if applicable)
-                // sh 'pip3 install -r requirements.txt'  // Uncomment if you have dependencies
+                // If you have a requirements.txt, install dependencies
+                // sh 'pip3 install -r requirements.txt'  // Uncomment this if you have a requirements.txt
             }
         }
 
