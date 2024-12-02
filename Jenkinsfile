@@ -6,12 +6,12 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                script {
-                    // Checkout the code from GitHub repository, specifying the main branch
-                    git branch: 'main', url: 'https://github.com/Meenaaraj/jenkins'
-                }
+          stage('Checkout'){
+           steps {
+                
+                git url: 'https://github.com/Meenaaraj/jenkins',
+                branch: 'main'
+
             }
         }
 
