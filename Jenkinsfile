@@ -25,6 +25,8 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
+
+                echo 'This is a valid stage with steps.'
                 // Install any dependencies listed in requirements.txt (if applicable)
                 // sh 'pip3 install -r requirements.txt'  // Uncomment if you have dependencies
             }
