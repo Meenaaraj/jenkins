@@ -28,7 +28,7 @@ pipeline {
             steps {
                 // Run app.py to print "Hello, World!"
                 sh '''
-                $PYTHON app.py
+                $PYTHON main/app.py
                 '''
             }
         }
