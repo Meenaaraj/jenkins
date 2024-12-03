@@ -8,9 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git credentialsId: 'Meena',  // Replace with your actual credentialsId
-                    url: 'https://github.com/Meenaaraj/jenkins.git',
-                    branch: 'main'
+                git 'https://github.com/Meenaaraj/jenkins'
             }
         }
 
