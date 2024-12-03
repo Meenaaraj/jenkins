@@ -29,7 +29,7 @@ pipeline {
             steps {
                 // Run tests using pytest
                 sh '''
-                $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q
+                $PYTHON -m pytest main/test_app.py --maxfail=1 --disable-warnings -q 
                 '''
             }
         }
