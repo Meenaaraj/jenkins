@@ -1,51 +1,60 @@
 pipeline {
     agent any
 
-    tools {
-        git 'Default'  // Ensure the correct Git tool is used
+    environment {
+        // Define environment variables if needed
+        PYTHON = 'python3'
+        PIP = 'pip3'
     }
 
     stages {
-        stage('Checkout') {
+        stage('Clone Repository') {
             steps {
-                git 'https://github.com/Meenaaraj/jenkins'
+                // Clone your repository containing the Python files
+                git 'https://github.com/Meenaaraj/jenkins.git'
             }
         }
 
-        stage('Set up Python') {
+        stage('Set Up Python Environment') {
             steps {
-                sh 'sudo apt-get update'
-            }
-        }
-
-        stage('Install Dependencies') {
-            steps {
-                sh 'sudo apt-get install -y python3 python3-pip'
+                // Install dependencies (if you have requirements.txt)
+                sh '''
+                $PIP install --upgrade pip
+                $PIP install -r requirements.txt || true  # if you have requirements.txt
+                '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                sh 'pytest tests/'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                sh 'python3 setup.py install'
+                // Run tests using pytest
+                sh '''
+                $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q
+                '''
             }
         }
 
         stage('Deploy') {
             steps {
-                sh 'echo "Deploying to production"'
+                // Here you can deploy your application if needed
+                echo 'Deploying app...'
             }
         }
     }
 
     post {
         always {
-            echo 'Pipeline completed.'
+            // Clean up or post build actions
+            echo 'Cleaning up after build'
+        }
+
+        success {
+            echo 'Pipeline executed successfully!'
+        }
+
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
+
