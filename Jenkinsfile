@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     environment {
-        // Define environment variables if needed
         PYTHON = 'python3'
         PIP = 'pip3'
     }
@@ -20,7 +19,16 @@ pipeline {
                 // Install dependencies (if you have requirements.txt)
                 sh '''
                 $PIP install --upgrade pip
-                $PIP install -r requirements.txt || true  # if you have requirements.txt
+                $PIP install -r requirements.txt || true
+                '''
+            }
+        }
+
+        stage('Run App.py') {
+            steps {
+                // Run app.py to print "Hello, World!"
+                sh '''
+                $PYTHON app.py
                 '''
             }
         }
@@ -29,14 +37,14 @@ pipeline {
             steps {
                 // Run tests using pytest
                 sh '''
-                $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q 
+                $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q
                 '''
             }
         }
 
         stage('Deploy') {
             steps {
-                // Here you can deploy your application if needed
+                // Placeholder for deployment actions
                 echo 'Deploying app...'
             }
         }
@@ -57,4 +65,3 @@ pipeline {
         }
     }
 }
-
