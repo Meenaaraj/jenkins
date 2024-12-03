@@ -9,14 +9,12 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                // Clone your repository containing the Python files
                 git 'https://github.com/Meenaaraj/jenkins.git'
             }
         }
 
         stage('Set Up Python Environment') {
             steps {
-                // Install dependencies (if you have requirements.txt)
                 sh '''
                 $PIP install --upgrade pip
                 $PIP install -r requirements.txt || true
@@ -24,18 +22,24 @@ pipeline {
             }
         }
 
+        stage('Check Workspace') {
+            steps {
+                // List files in the workspace to confirm app.py is present
+                sh 'ls -al'
+            }
+        }
+
         stage('Run App.py') {
             steps {
-                // Run app.py to print "Hello, World!"
+                echo 'Running app.py'
                 sh '''
-                $PYTHON main/app.py
+                $PYTHON app.py
                 '''
             }
         }
 
         stage('Run Tests') {
             steps {
-                // Run tests using pytest
                 sh '''
                 $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q
                 '''
@@ -44,7 +48,6 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                // Placeholder for deployment actions
                 echo 'Deploying app...'
             }
         }
@@ -52,7 +55,6 @@ pipeline {
 
     post {
         always {
-            // Clean up or post build actions
             echo 'Cleaning up after build'
         }
 
