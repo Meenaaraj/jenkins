@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         PYTHON = 'python3'
-    
     }
 
     stages {
@@ -18,28 +17,12 @@ pipeline {
             }
         }
 
-        // Set up Python environment and install dependencies
-        stage('Set Up Python Environment') {
+        // Check the Python environment
+        stage('Check Python Environment') {
             steps {
                 sh '''
                 echo "Checking Python version"
                 python3 --version
-
-                echo "Checking pip version"
-                which pip3 || echo "pip3 not found"
-                pip3 --version || echo "pip3 not found"
-                
-                # If pip3 is not found, we will attempt to install it
-                if ! command -v pip3 &> /dev/null; then
-                    echo "pip3 not found, installing..."
-                    python3 -m ensurepip --upgrade
-                fi
-
-                echo "Upgrading pip"
-                python3 -m pip install --upgrade pip
-
-                echo "Installing requirements"
-                pip3 install -r requirements.txt || true
                 '''
             }
         }
