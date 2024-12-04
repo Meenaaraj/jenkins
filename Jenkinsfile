@@ -18,7 +18,7 @@ pipeline {
             
         }
     }
-        }
+        
 
         stage('Set Up Python Environment') {
             steps {
