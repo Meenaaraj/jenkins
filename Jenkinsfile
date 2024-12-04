@@ -7,10 +7,17 @@ pipeline {
     }
 
     stages {
+
         stage('Clone Repository') {
             steps {
-                git 'https://github.com/Meenaaraj/jenkins.git'
+                git(
+                    url: 'https://github.com/Meenaaraj/jenkins.git',
+                    branch: 'main',  // specify the branch explicitly
+                    credentialsId: 'github-credentials'
+                )
             }
+        }
+    }
         }
 
         stage('Set Up Python Environment') {
