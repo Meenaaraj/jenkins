@@ -7,71 +7,80 @@ pipeline {
     }
 
     stages {
-        // Stage to clone the repository
+        // Clone the GitHub repository
         stage('Clone Repository') {
             steps {
                 git(
                     url: 'https://github.com/Meenaaraj/jenkins.git',
                     branch: 'main',  // Specify the branch explicitly
-                    credentialsId: 'github-credentials'  // Make sure the credentialsId is correct
+                    credentialsId: 'github-credentials'  // Make sure this credentials ID is correct
                 )
             }
         }
 
-        // Stage to set up Python environment
+        // Set up Python environment and install dependencies
         stage('Set Up Python Environment') {
             steps {
                 sh '''
-                # Check Python version
-                $PYTHON --version
-                # Upgrade pip to latest version
-                $PIP install --upgrade pip
-                # Install dependencies (ignore errors if any)
-                $PIP install -r requirements.txt || true
+                echo "Checking Python version"
+                python3 --version
+
+                echo "Checking pip version"
+                which pip3 || echo "pip3 not found"
+                pip3 --version || echo "pip3 not found"
+                
+                # If pip3 is not found, we will attempt to install it
+                if ! command -v pip3 &> /dev/null; then
+                    echo "pip3 not found, installing..."
+                    python3 -m ensurepip --upgrade
+                fi
+
+                echo "Upgrading pip"
+                python3 -m pip install --upgrade pip
+
+                echo "Installing requirements"
+                pip3 install -r requirements.txt || true
                 '''
             }
         }
 
-        // Stage to check the workspace and list files
+        // Check the workspace to ensure the required files exist
         stage('Check Workspace') {
             steps {
-                echo 'Listing files in workspace to verify app.py presence:'
+                echo 'Listing files in workspace to verify app.py and requirements.txt presence:'
                 sh 'ls -al'
             }
         }
 
-        // Stage to run the app.py script
+        // Run the Python app
         stage('Run App.py') {
             steps {
                 echo 'Running app.py'
                 sh '''
-                # Run the app.py script
-                $PYTHON app.py
+                python3 app.py
                 '''
             }
         }
 
-        // Stage to run tests
+        // Run the tests using pytest
         stage('Run Tests') {
             steps {
                 echo 'Running tests with pytest'
                 sh '''
-                # Run tests using pytest
-                $PYTHON -m pytest test_app.py --maxfail=1 --disable-warnings -q
+                python3 -m pytest test_app.py --maxfail=1 --disable-warnings -q
                 '''
             }
         }
 
-        // Stage to deploy the app (add deployment steps here)
+        // Deploy stage (Add actual deployment steps here)
         stage('Deploy') {
             steps {
                 echo 'Deploying app...'
-                // Add your deploy commands here
+                // Add your deployment steps here
             }
         }
     }
 
-    // Post actions to handle build results
     post {
         always {
             echo 'Cleaning up after build'
