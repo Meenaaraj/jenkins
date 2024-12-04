@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         PYTHON = 'python3'
-        PIP = 'pip3'
+    
     }
 
     stages {
